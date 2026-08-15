@@ -216,7 +216,8 @@ def resolve_input_files(paths: list[str]) -> list[Path]:
     resolved = []
     for raw_path in paths:
         path_str = os.path.expanduser(raw_path)
-        if any((char in path_str for char in ('*', '?', '['))):
+        looks_like_glob = any((char in path_str for char in ('*', '?', '[')))
+        if looks_like_glob and not Path(path_str).exists():
             glob_matches = glob.glob(path_str, recursive=True)
             expanded = []
             for match in glob_matches:
